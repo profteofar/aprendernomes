@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprender Nomes - 5º/6º Ano</title>
+    <!-- Carregar Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carregar Tone.js para sons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    
+    <!-- Configuração do Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Times New Roman', 'serif'],
+                        cursive: ['Brush Script MT', 'cursive']
+                    },
+                    keyframes: {
+                        confetti: {
+                            '0%': { transform: 'translateY(-100vh) rotate(0deg)', opacity: 1 },
+                            '100%': { transform: 'translateY(100vh) rotate(720deg)', opacity: 0.5 },
+                        },
+                        pulse: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
+                        }
+                    },
+                    animation: {
+                        confetti: 'confetti 3s ease-out infinite',
+                        pulse: 'pulse 1.5s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Estilos CSS Personalizados e para Impressão -->
+    <style type="text/css">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Esconder secções por defeito */
+        .section {
+            display: none;
+        }
+        
+        /* Mostrar a secção ativa */
+        .section.active {
+            display: block;
+        }
+
+        /* Feedback visual para respostas */
+        .correct-answer {
+            border-color: #10b981 !important; /* green-500 */
+            background-color: #f0fdf4 !important; /* green-50 */
+        }
+        
+        .wrong-answer {
+            border-color: #ef4444 !important; /* red-500 */
+            background-color: #fef2f2 !important; /* red-50 */
+        }
+
+        /* Estilos para a animação de confetti */
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00; /* Será alterado por JS */
+            opacity: 0;
+            animation: confetti 3s linear forwards;
+        }
+        
+        /* Estilos do Chat IA */
+        .user-message {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        .user-message-bubble {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px 20px 5px 20px;
+            max-width: 80%;
+        }
+        .ai-message {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 8px;
+        }
+        .ai-message-bubble {
+            background-color: #e5e7eb; /* gray-200 */
+            color: #1f2937; /* gray-800 */
+            padding: 10px 15px;
+            border-radius: 20px 20px 20px 5px;
+            max-width: 80%;
+            border: 1px solid #d1d5db; /* gray-300 */
+        }
+        .ai-message-bubble-grounded {
+             background-color: #e0f2fe; /* sky-100 */
+             border: 1px solid #0284c7; /* sky-600 */
+        }
+        .ai-sources {
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 8px;
+        }
+        .ai-sources a {
+            color: #0284c7; /* sky-600 */
+            text-decoration: underline;
+        }
+        
+        /* Estilos de Impressão */
+        @media print {
+            /* Esconde tudo por defeito */
+            body > * { display: none !important; }
+            .no-print { display: none !important; }
+
+            /* --- Mostra FICHAS DE TRABALHO --- */
+            body.printing-sheets #print-container {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 2cm;
+                color: #000 !important;
+            }
+            body.printing-sheets #print-container * {
+                visibility: visible !important;
+            }
+            body.printing-sheets .print-header {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 2px solid #ccc;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                font-family: Arial, sans-serif;
+            }
+            body.printing-sheets .print-title {
+                font-size: 24pt;
+                font-weight: bold;
+                margin-bottom: 30px;
+            }
+            body.printing-sheets .print-module-title {
+                font-size: 18pt;
+                font-weight: bold;
+                margin-top: 25px;
+                margin-bottom: 15px;
+                border-bottom: 1px solid #999;
+                padding-bottom: 5px;
+            }
+            body.printing-sheets .print-activity-title {
+                font-size: 14pt;
+                font-weight: bold;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            body.printing-sheets .print-theory, .print-activity {
+                margin-bottom: 25px;
+                page-break-inside: avoid;
+            }
+            body.printing-sheets .print-theory h4 {
+                font-size: 12pt;
+                font-weight: bold;
+            }
+            body.printing-sheets .print-theory p, .print-theory li {
+                 font-size: 11pt;
+                 line-height: 1.5;
+            }
+            body.printing-sheets .print-activity .item, .print-activity .sentence {
+                font-size: 11pt;
+                margin-bottom: 15px;
+                line-height: 1.8;
+            }
+            body.printing-sheets .print-answer-line {
+                border-bottom: 1px solid #333;
+                min-width: 150px;
+                display: inline-block;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+            body.printing-sheets .print-choice {
+                margin-right: 20px;
+                font-size: 11pt;
+            }
+            body.printing-sheets .print-choice-box {
+                 display: inline-block;
+                 width: 15px;
+                 height: 15px;
+                 border: 1px solid #333;
+                 margin-right: 5px;
+                 transform: translateY(2px);
+            }
+
+            /* --- Estilos de impressão do certificado removidos --- */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Recipiente principal da aplicação -->
+    <div id="app-container">
+
+        <!-- Secção Menu Principal -->
+        <section id="section-menu" class="section active min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-6">
+            <!-- ADICIONADO "relative" A ESTE CONTAINER -->
+            <div class="max-w-6xl mx-auto relative">
+
+                <!-- NOVO: Container para os botões de settings (Timer e Som) -->
+                <div class="absolute top-6 right-6 flex gap-4 no-print">
+                    <button
+                        id="toggle-sound-btn"
+                        class="px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center bg-green-500 text-white hover:bg-green-600"
+                    >
+                        <!-- Ícone de Volume SVG -->
+                        <svg id="sound-on-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-0 sm:mr-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        <!-- Ícone de Volume Mudo SVG -->
+                        <svg id="sound-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-0 sm:mr-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                        <span id="sound-status-text" class="hidden sm:inline">Sons Ativos</span>
+                    </button>
+                    
+                    <!-- NOVO: Botão Timer -->
+                    <button
+                        id="toggle-timer-btn"
+                        class="px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center bg-gray-300 text-gray-700 hover:bg-gray-400"
+                    >
+                        <!-- Ícone Timer Ligado SVG -->
+                        <svg id="timer-on-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-0 sm:mr-2 hidden"><circle cx="12" cy="13" r="8"></circle><polyline points="12 9 12 13 14 15"></polyline><line x1="12" y1="5" x2="12" y2="2"></line><line x1="18" y1="5" x2="16" y2="7"></line><line x1="6" y1="5" x2="8" y2="7"></line></svg>
+                        <!-- Ícone Timer Desligado SVG -->
+                        <svg id="timer-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-0 sm:mr-2"><line x1="2" y1="2" x2="22" y2="22"></line><circle cx="12" cy="13" r="8"></circle><polyline points="12 9 12 13 14 15"></polyline><line x1="12" y1="5" x2="12" y2="2"></line><line x1="18" y1="5" x2="16" y2="7"></line><line x1="6" y1="5" x2="8" y2="7"></line></svg>
+                        <span id="timer-status-text" class="hidden sm:inline">Timer Desativo</span>
+                    </button>
+                </div>
+
+                <div class="text-center mb-12">
+                    <div class="inline-block bg-white rounded-full p-4 shadow-lg mb-4">
+                        <!-- Ícone de Livro SVG (substituindo lucide-react) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+                    </div>
+                    <h1 class="text-5xl font-bold text-gray-800 mb-3">Aprender Nomes</h1>
+                    <p class="text-xl text-gray-600">Português - 5º e 6º anos</p>
+                    
+                    <div id="name-input-container" class="mt-6 max-w-md mx-auto">
+                        <input
+                            type="text"
+                            id="student-name-input"
+                            placeholder="Escreve o teu nome..."
+                            class="w-full p-3 border-2 border-indigo-300 rounded-lg focus:border-indigo-600 focus:outline-none text-center text-lg"
+                        />
+                    </div>
+                    
+                    <div id="welcome-message-container" class="mt-6 hidden">
+                        <p class="text-2xl font-bold text-indigo-600">
+                            Olá, <span id="student-name-display"></span>! 👋
+                        </p>
+                        <button
+                            id="change-name-btn"
+                            class="text-sm text-gray-500 hover:text-gray-700 mt-2"
+                        >
+                            (mudar nome)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BOTÕES DE AÇÃO PRINCIPAIS (AGORA SEM SOM E TIMER) -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                    <button
+                        id="print-sheets-btn"
+                        class="px-6 py-3 rounded-lg font-semibold bg-blue-500 text-white hover:bg-blue-600 transition-all flex items-center justify-center"
+                    >
+                        <!-- Ícone de Impressora SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        Imprimir Fichas
+                    </button>
+                    
+                    <!-- NOVO: Botão Assistente IA -->
+                    <button
+                        id="ai-assistant-btn"
+                        class="px-6 py-3 rounded-lg font-semibold bg-purple-600 text-white hover:bg-purple-700 transition-all flex items-center justify-center"
+                    >
+                        <!-- Ícone de IA (Faísca) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2"><path d="M12 2L14.39 8.39L21 9.61L16.5 14.5L18 21.02L12 17.77L6 21.02L7.5 14.5L3 9.61L9.61 8.39L12 2z"></path></svg>
+                        Assistente IA
+                    </button>
+                    
+                    <button
+                        id="certificate-btn"
+                        class="px-6 py-3 rounded-lg font-semibold bg-yellow-500 text-white hover:bg-yellow-600 transition-all flex items-center justify-center disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                        <!-- Ícone de Certificado SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline><path d="m9 11 1 1 2-2"></path><path d="m9 17 1 1 2-2"></path></svg>
+                        Ver Certificado
+                    </button>
+                </div>
+
+                <div id="modules-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Módulos serão inseridos aqui por JS -->
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <!-- Ícone de Estrela SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-yellow-500 mr-2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        Objetivos de Aprendizagem
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <!-- Ícone de CheckCircle SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-green-500 mr-3 mt-1 flex-shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <span>Identificar e classificar nomes próprios, comuns e comuns coletivos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-green-500 mr-3 mt-1 flex-shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <span>Dominar as regras de formação do feminino e do plural</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-green-500 mr-3 mt-1 flex-shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            <span>Utilizar corretamente os graus dos nomes</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secção Teoria -->
+        <section id="section-theory" class="section min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+            <div class="max-w-4xl mx-auto">
+                <button
+                    onclick="navigateTo('menu')"
+                    class="mb-6 text-indigo-600 hover:text-indigo-800 font-semibold flex items-center no-print"
+                >
+                    <!-- Ícone Seta Esquerda SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Voltar ao Menu
+                </button>
+
+                <div id="theory-content" class="bg-white rounded-2xl shadow-xl p-8 mb-6">
+                    <!-- Conteúdo da teoria será inserido aqui por JS -->
+                </div>
+
+                <button
+                    id="start-practice-btn"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg flex items-center justify-center animation-pulse no-print"
+                >
+                    Começar Atividades
+                    <!-- Ícone Seta Direita SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 ml-2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Secção Prática (Atividades) -->
+        <section id="section-practice" class="section min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 p-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-6 no-print">
+                    <button
+                        id="back-to-theory-btn"
+                        class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center"
+                    >
+                        <!-- Ícone Seta Esquerda SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Voltar à Teoria
+                    </button>
+                    <!-- NOVO: Timer Display -->
+                    <span id="timer-display" class="font-semibold text-lg text-indigo-600 bg-indigo-100 px-3 py-1 rounded-lg hidden">00:00</span>
+                    <div class="text-gray-600 font-semibold">
+                        Atividade <span id="current-activity-number">1</span> de <span id="total-activity-number">1</span>
+                    </div>
+                </div>
+
+                <!-- Barra de Progresso -->
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6 no-print">
+                    <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+
+                <div id="activity-content" class="bg-white rounded-2xl shadow-xl p-8 mb-6">
+                    <!-- Conteúdo da atividade será inserido aqui por JS -->
+                </div>
+
+                <div id="activity-navigation" class="flex gap-4 no-print">
+                    <!-- Botões de navegação serão inseridos aqui por JS -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Secção Resultados -->
+        <section id="section-results" class="section min-h-screen bg-gradient-to-br from-green-50 to-blue-100 p-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-xl p-12 text-center">
+                    <!-- Ícone Troféu SVG -->
+                    <svg id="results-trophy" xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-24 h-24 mx-auto mb-6 text-gray-400"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V22"></path><path d="M14 14.66V22"></path><path d="M17 9c0 2.65-2 4.95-5 5.5V22h-2V14.5c-3-.55-5-2.85-5-5.5s2-5.5 5-5.5 5 2.85 5 5.5z"></path></Capa></svg>
+                    
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">Resultados</h2>
+                    
+                    <div id="results-score" class="text-6xl font-bold mb-6">0%</div>
+                    
+                    <!-- NOVO: Results Time -->
+                    <p id="results-time" class="text-xl text-gray-700 mb-8 hidden"></p>
+
+                    <p id="results-message" class="text-xl text-gray-700 mb-8">...</p>
+                    
+                    <div id="results-name-summary" class="bg-indigo-50 rounded-lg p-6 mb-8 hidden">
+                        <p class="text-lg text-gray-700">
+                            <strong><span id="results-student-name"></span></strong>, o teu progresso foi guardado!
+                        </p>
+                    </div>
+
+                    <!-- Resumo das Respostas -->
+                    <div id="answers-summary-container" class="mb-8 text-left">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Revisão das Atividades</h3>
+                        <div id="answers-summary-content" class="max-h-60 overflow-y-auto space-y-4 p-4 bg-gray-50 rounded-lg border">
+                            <!-- Resumo será inserido aqui por JS -->
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 no-print">
+                        <button
+                            id="retry-module-btn"
+                            class="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all flex items-center justify-center"
+                        >
+                            <!-- Ícone Rodar SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2"><path d="M21 12a9 9 0 1 1-6.2-8.7L21 12z"></path><path d="M3 12a9 9 0 0 0 15 5.7l-1.8-1.8A7 7 0 0 1 3 12z"></path></svg>
+                            Tentar Novamente
+                        </button>
+                        <button
+                            onclick="navigateTo('menu')"
+                            class="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300 transition-all"
+                        >
+                            Menu Principal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOVO: Secção Certificado -->
+        <section id="section-certificate" class="section min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 p-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex justify-start items-center mb-6 no-print">
+                    <button
+                        onclick="navigateTo('menu')"
+                        class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center"
+                    >
+                        <!-- Ícone Seta Esquerda SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Voltar ao Menu
+                    </button>
+                    <!-- Botão de impressão do certificado removido -->
+                </div>
+
+                <!-- O Certificado em si -->
+                <div id="certificate-paper" class="bg-white rounded-2xl shadow-xl p-12 border-4 border-yellow-500" style="background: #fff;">
+                    <div class="border-2 border-indigo-600 p-8 rounded-lg text-center" style="border-style: dashed;">
+                        
+                        <div class="flex justify-center items-center mb-6">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"></path></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 mx-4"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"></path></svg>
+                        </div>
+                        
+                        <h2 class="text-4xl font-bold text-indigo-800 mb-4 font-serif">Certificado de Conclusão</h2>
+                        
+                        <p class="text-lg text-gray-700 mb-6">Este certificado é orgulhosamente apresentado a</p>
+                        
+                        <p id="certificate-name" class="text-5xl font-bold text-indigo-800 mb-8 font-cursive">
+                            <!-- Nome do Aluno -->
+                        </p>
+                        
+                        <p class="text-lg text-gray-700 mb-6">
+                            pela conclusão com sucesso de todos os módulos de<br>
+                            <strong>Aprender Nomes (5º/6º Ano)</strong>
+                        </p>
+                        
+                        <p class="text-sm text-gray-600 mb-8">Concluído em: <span id="certificate-date"></span></p>
+
+                        <!-- Tabela de Pontuações -->
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Registo de Progresso</h3>
+                        <div id="certificate-scores" class="max-w-md mx-auto text-left space-y-2">
+                            <!-- Pontuações serão inseridas aqui -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOVO: Secção Assistente IA (Modal) -->
+        <section id="section-ai-assistant" class="section fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-6 z-50 no-print" style="display: none;">
+            <div class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl w-full h-[80vh] flex flex-col">
+                <!-- Cabeçalho do Modal -->
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <!-- Ícone de IA (Faísca) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-purple-600 mr-2"><path d="M12 2L14.39 8.39L21 9.61L16.5 14.5L18 21.02L12 17.77L6 21.02L7.5 14.5L3 9.61L9.61 8.39L12 2z"></path></svg>
+                        Assistente de Gramática
+                    </h2>
+                    <button id="close-ai-btn" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+                </div>
+                
+                <!-- Histórico do Chat -->
+                <div id="ai-chat-history" class="flex-1 overflow-y-auto bg-gray-100 rounded-lg p-4 space-y-4 mb-4">
+                    <!-- Mensagem Inicial -->
+                    <div class="ai-message">
+                        <div class="ai-message-bubble">
+                            Olá! Eu sou o teu assistente de IA. Podes pedir-me para explicar regras de gramática, dar mais exemplos ou até encontrar nomes em notícias de hoje (marca a opção "Pesquisar na Internet" para isso).
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Indicador de "A pensar..." -->
+                <div id="ai-loading" class="text-center mb-4 hidden">
+                    <span class="text-sm text-gray-500 italic">O assistente está a pensar...</span>
+                </div>
+
+                <!-- Input do Utilizador -->
+                <div class="flex gap-2">
+                    <input type="text" id="ai-input" class="flex-1 w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none text-lg" placeholder="Escreve a tua pergunta...">
+                    <button id="ai-send-btn" class="px-6 py-3 rounded-lg font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-all flex items-center justify-center">
+                        <!-- Ícone de Enviar -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+                
+                <!-- Checkbox para Pesquisa na Web -->
+                <div class="mt-4">
+                    <input type="checkbox" id="ai-search-checkbox" class="mr-2 rounded border-gray-400 text-indigo-600 focus:ring-indigo-500">
+                    <label for="ai-search-checkbox" class="text-sm text-gray-600 select-none">Pesquisar na Internet (para exemplos atuais)</label>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <!-- Container para Confetti -->
+    <div id="confetti-container"></div>
+    
+    <!-- Container para Fichas de Impressão (invisível, só para @media print) -->
+    <div id="print-container" class="hidden">
+        <div class="print-header">
+            <div>
+                <p><strong>Nome:</strong> ___________________________________</p>
+            </div>
+            <div>
+                <p><strong>Data:</strong> ____ / ____ / ________</p>
+            </div>
+        </div>
+        <h1 class="print-title">Fichas de Trabalho: Nomes (5º/6º Ano)</h1>
+        <div id="print-content">
+            <!-- Conteúdo de impressão será gerado aqui por JS -->
+        </div>
+    </div>
+
+    <!-- JavaScript da Aplicação -->
+    <script>
+        // --- ESTADO DA APLICAÇÃO ---
+        
+        let state = {
+            currentSection: 'menu', // 'menu', 'theory', 'practice', 'results', 'certificate'
+            selectedModule: null, // 'subclasses', 'genero', 'numero', 'grau'
+            currentActivity: 0,
+            studentName: '',
+            soundEnabled: true,
+            timerEnabled: false, // NOVO: Estado do Timer
+            moduleStartTime: null, // NOVO: Início do timer
+            moduleTimeTaken: 0, // NOVO: Tempo gasto (em segundos)
+            timerIntervalId: null, // NOVO: ID do intervalo do timer
+            progress: {
+                scores: {},
+                times: {} // NOVO: Melhores tempos
+            },
+            activityAnswers: {}, // Respostas da atividade atual
+            moduleAnswers: [] // Respostas de todo o módulo
+        };
+
+        // --- SONS ---
+        let correctSound, wrongSound, clickSound;
+        
+        // Inicializar os sons após a primeira interação do utilizador
+        function initSounds() {
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+            
+            correctSound = new Tone.Synth({
+                oscillator: { type: 'sine' },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+            }).toDestination();
+            
+            wrongSound = new Tone.Synth({
+                oscillator: { type: 'square' },
+                envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.1 }
+            }).toDestination();
+            
+            clickSound = new Tone.Synth({
+                oscillator: { type: 'sine' },
+                envelope: { attack: 0.01, decay: 0.05, sustain: 0, release: 0.1 }
+            }).toDestination();
+            
+            console.log('Sons inicializados');
+        }
+
+        function playSound(sound) {
+            // NOVO: Garantir que os sons estão inicializados ANTES de tentar usá-los
+            if (state.soundEnabled && !correctSound) {
+                initSounds();
+            }
+
+            if (state.soundEnabled && sound) {
+                if (Tone.context.state !== 'running') {
+                    Tone.start();
+                }
+                
+                if (sound === 'correct') {
+                    correctSound.triggerAttackRelease("C5", "8n");
+                } else if (sound === 'wrong') {
+                    wrongSound.triggerAttackRelease("E3", "8n");
+                } else if (sound === 'click') {
+                    clickSound.triggerAttackRelease("C4", "16n");
+                }
+            }
+        }
+        
+        // --- BASE DE DADOS (CONTEÚDOS) ---
+
+        const modules = [
+            {
+                id: 'subclasses',
+                title: 'Subclasses do Nome',
+                description: 'Nomes próprios, comuns e comuns coletivos',
+                color: 'from-blue-500 to-blue-600',
+                icon: '📚'
+            },
+            {
+                id: 'genero',
+                title: 'Género do Nome',
+                description: 'Formação do masculino e feminino',
+                color: 'from-purple-500 to-purple-600',
+                icon: '⚖️'
+            },
+            {
+                id: 'numero',
+                title: 'Número do Nome',
+                description: 'Formação do singular e plural',
+                color: 'from-green-500 to-green-600',
+                icon: '🔢'
+            },
+            {
+                id: 'grau',
+                title: 'Grau do Nome',
+                description: 'Normal, aumentativo e diminutivo',
+                color: 'from-orange-500 to-orange-600',
+                icon: '📏'
+            }
+        ];
+
+        const theoryContent = {
+            subclasses: {
+                title: 'Subclasses do Nome',
+                sections: [
+                    {
+                        subtitle: 'Nome Próprio',
+                        content: 'Designa seres ou entidades individualizados, únicos. Escreve-se sempre com letra maiúscula inicial.',
+                        examples: ['Portugal', 'Rio Tejo', 'Maria', 'Lisboa', 'Bobby (nome de um cão)']
+                    },
+                    {
+                        subtitle: 'Nome Comum',
+                        content: 'Designa seres ou entidades de uma espécie ou categoria, não individualizados. Escreve-se com letra minúscula.',
+                        examples: ['país', 'rio', 'menina', 'cidade', 'cão']
+                    },
+                    {
+                        subtitle: 'Nome Comum Coletivo',
+                        content: 'Designa, no singular, um conjunto de seres ou objetos da mesma espécie.',
+                        examples: ['matilha (conjunto de cães ou lobos)', 'rebanho (conjunto de ovelhas)', 'frota (conjunto de navios ou autocarros)', 'exército (conjunto de soldados)', 'cardume (conjunto de peixes)']
+                    }
+                ]
+            },
+            genero: {
+                title: 'Género do Nome',
+                sections: [
+                    {
+                        subtitle: 'Formação do Feminino - Regra Geral',
+                        content: 'Muitos nomes formam o feminino trocando o "-o" final por "-a".',
+                        examples: ['gato → gata', 'menino → menina', 'professor → professora', 'doutor → doutora']
+                    },
+                    {
+                        subtitle: 'Casos Especiais',
+                        content: 'Existem muitas formas diferentes de formar o feminino:',
+                        examples: [
+                            'Nomes terminados em -ão: leão → leoa; cidadão → cidadã; patrão → patroa',
+                            'Nomes terminados em -or: ator → atriz; imperador → imperatriz',
+                            'Nomes com formas diferentes: homem → mulher; pai → mãe; cavalo → égua',
+                            'Nomes terminados em -eu: europeu → europeia; judeu → judia'
+                        ]
+                    },
+                    {
+                        subtitle: 'Nomes Comuns de Dois Géneros',
+                        content: 'Têm a mesma forma para o masculino e feminino. A distinção é feita pelo determinante (artigo, por exemplo).',
+                        examples: ['o/a estudante', 'o/a jornalista', 'o/a artista', 'o/a cliente']
+                    },
+                    {
+                        subtitle: 'Nomes Sobrecomuns',
+                        content: 'Têm uma só forma e um só género gramatical para designar tanto o masculino como o feminino.',
+                        examples: ['a criança', 'o indivíduo', 'a testemunha', 'a vítima']
+                    }
+                ]
+            },
+            numero: {
+                title: 'Número do Nome',
+                sections: [
+                    {
+                        subtitle: 'Formação do Plural - Regra Geral',
+                        content: 'A maioria dos nomes forma o plural acrescentando um "-s" ao singular.',
+                        examples: ['casa → casas', 'livro → livros', 'escola → escolas']
+                    },
+                    {
+                        subtitle: 'Terminados em -r, -s, -z',
+                        content: 'Acrescenta-se "-es".',
+                        examples: ['mar → mares', 'país → países', 'rapaz → rapazes']
+                    },
+                    {
+                        subtitle: 'Terminados em -ão',
+                        content: 'Podem formar o plural de três formas: -ãos, -ães, -ões.',
+                        examples: ['mão → mãos', 'cão → cães', 'leão → leões']
+                    },
+                    {
+                        subtitle: 'Terminados em -l',
+                        content: 'Trocam o "-l" por "-is".',
+                        examples: ['jornal → jornais', 'papel → papéis', 'funil → funis', 'azul → azuis']
+                    },
+                     {
+                        subtitle: 'Terminados em -m',
+                        content: 'Trocam o "-m" por "-ns".',
+                        examples: ['jardim → jardins', 'homem → homens', 'som → sons']
+                    }
+                ]
+            },
+            grau: {
+                title: 'Grau do Nome',
+                sections: [
+                    {
+                        subtitle: 'Grau Normal',
+                        content: 'Indica o tamanho normal do ser ou objeto.',
+                        examples: ['casa', 'cão', 'nariz', 'menino']
+                    },
+                    {
+                        subtitle: 'Grau Aumentativo',
+                        content: 'Indica um tamanho maior que o normal. Pode ser formado com sufixos (-ão, -aço, -alhão) ou com adjetivos (grande, enorme).',
+                        examples: ['casarão', 'canzarrão', 'narigão', 'meninão', 'casa grande']
+                    },
+                    {
+                        subtitle: 'Grau Diminutivo',
+                        content: 'Indica um tamanho menor que o normal. Também pode exprimir carinho ou desprezo. Formado com sufixos (-inho, -ito, -zinho) ou com adjetivos (pequeno, minúsculo).',
+                        examples: ['casinha', 'cãozinho', 'narizito', 'menininho', 'casa pequena']
+                    }
+                ]
+            }
+        };
+
+        const activities = {
+            subclasses: [
+                {
+                    id: 'sc1',
+                    type: 'classification',
+                    question: 'Classifica os seguintes nomes em Próprio, Comum ou Comum Coletivo:',
+                    items: [
+                        { word: 'Porto', correct: 'proprio' },
+                        { word: 'livro', correct: 'comum' },
+                        { word: 'cardume', correct: 'coletivo' },
+                        { word: 'Guadiana', correct: 'proprio' },
+                        { word: 'árvore', correct: 'comum' },
+                        { word: 'rebanho', correct: 'coletivo' }
+                    ],
+                    options: [
+                        { id: 'proprio', label: 'Nome Próprio' },
+                        { id: 'comum', label: 'Nome Comum' },
+                        { id: 'coletivo', label: 'Nome Comum Coletivo' }
+                    ]
+                },
+                {
+                    id: 'sc2',
+                    type: 'complete',
+                    question: 'Completa as frases com o nome coletivo correto, escolhendo da lista.',
+                    options: ['alcateia', 'multidão', 'pinhal', 'constelação', 'exército'],
+                    sentences: [
+                        { text: 'Uma ____________ é um conjunto de estrelas.', answer: 'constelação' },
+                        { text: 'A ____________ de lobos foi ouvida na serra.', answer: 'alcateia' }, // Corrigido (era "O")
+                        { text: 'Uma ____________ de pessoas juntou-se na praça.', answer: 'multidão' },
+                        { text: 'Aquele ____________ tem muitos pinheiros.', answer: 'pinhal' }
+                    ]
+                },
+                {
+                    id: 'sc3',
+                    type: 'multipleChoice',
+                    question: 'Escolhe a opção correta.',
+                    questions: [
+                        {
+                            question: 'Qual destes nomes é um Nome Próprio?',
+                            options: ['país', 'França', 'capital', 'continente'],
+                            correct: 'França'
+                        },
+                        {
+                            question: 'A palavra "arquipélago" é um nome comum coletivo que significa um conjunto de...',
+                            options: ['ilhas', 'navios', 'livros', 'pessoas'],
+                            correct: 'ilhas'
+                        },
+                         {
+                            question: '"Manada" é o coletivo de:',
+                            options: ['ovelhas', 'elefantes', 'peixes', 'pássaros'],
+                            correct: 'elefantes'
+                        }
+                    ]
+                },
+                {
+                    id: 'sc4',
+                    type: 'association',
+                    question: 'Associa o nome coletivo ao conjunto que representa.',
+                    pairs: [
+                        { item: 'Frota', match: 'Navios' },
+                        { item: 'Ramalhete', match: 'Flores' },
+                        { item: 'Enxame', match: 'Abelhas' },
+                        { item: 'Biblioteca', match: 'Livros' },
+                    ],
+                    options: ['Flores', 'Abelhas', 'Livros', 'Navios'] // Opções para a 2ª coluna
+                },
+                {
+                    id: 'sc5',
+                    type: 'classification',
+                    question: 'Classifica os nomes destacados nas frases:',
+                    items: [
+                        { sentence: 'O <strong>cão</strong> ladra muito.', word: 'cão', correct: 'comum' },
+                        { sentence: 'A <strong>Joana</strong> foi a Paris.', word: 'Joana', correct: 'proprio' },
+                        { sentence: 'Vimos uma <strong>esquadrilha</strong> de aviões.', word: 'esquadrilha', correct: 'coletivo' },
+                        { sentence: 'O meu <strong>gato</strong> chama-se <strong>Pantufa</strong>.', word: 'Pantufa', correct: 'proprio' }
+                    ],
+                    options: [
+                        { id: 'proprio', label: 'Nome Próprio' },
+                        { id: 'comum', label: 'Nome Comum' },
+                        { id: 'coletivo', label: 'Nome Comum Coletivo' }
+                    ]
+                }
+            ],
+            genero: [
+                {
+                    id: 'g1',
+                    type: 'transform',
+                    question: 'Escreve o feminino dos seguintes nomes:',
+                    items: [
+                        { word: 'pai', answer: 'mãe' },
+                        { word: 'cão', answer: 'cadela' },
+                        { word: 'ator', answer: 'atriz' },
+                        { word: 'poeta', answer: 'poetisa' },
+                        { word: 'europeu', answer: 'europeia' }
+                    ]
+                },
+                {
+                    id: 'g2',
+                    type: 'multipleChoice',
+                    question: 'Escolhe a opção correta para o feminino.',
+                    questions: [
+                        {
+                            question: 'O feminino de "imperador" é:',
+                            options: ['imperadora', 'imperatriz'], // Removido duplicado
+                            correct: 'imperatriz'
+                        },
+                        {
+                            question: 'Qual destes nomes é "comum de dois géneros"?',
+                            options: ['o gato', 'a criança', 'o estudante', 'o homem'],
+                            correct: 'o estudante'
+                        },
+                         {
+                            question: 'O feminino de "cavalheiro" é:',
+                            options: ['cavalheira', 'égua', 'dama', 'senhora'],
+                            correct: 'dama'
+                        }
+                    ]
+                },
+                {
+                    id: 'g3',
+                    type: 'complete',
+                    question: 'Completa as frases com o feminino do nome entre parênteses.',
+                    sentences: [
+                        { text: 'A __________ (homem) do Zé é muito simpática.', answer: 'mulher' },
+                        { text: 'A __________ (judeu) falava hebraico.', answer: 'judia' },
+                        { text: 'A __________ (cidadão) participou na votação.', answer: 'cidadã' },
+                        { text: 'Aquela __________ (rapaz) é minha prima.', answer: 'rapariga' }
+                    ]
+                },
+                {
+                    id: 'g4',
+                    type: 'classification',
+                    question: 'Classifica os nomes quanto ao género (Comum de dois, Sobrecomum, Masculino/Feminino).',
+                    note: '"Masculino/Feminino" refere-se a nomes que mudam de forma (ex: gato/gata).',
+                    items: [
+                        { word: 'o/a jornalista', correct: 'comum-dois' },
+                        { word: 'a criança', correct: 'sobrecomum' },
+                        { word: 'menino / menina', correct: 'masc-fem' },
+                        { word: 'a vítima', correct: 'sobrecomum' },
+                        { word: 'o/a cliente', correct: 'comum-dois' }
+                    ],
+                    options: [
+                        { id: 'masc-fem', label: 'Muda de forma (ex: ator/atriz)' },
+                        { id: 'comum-dois', label: 'Comum de Dois Géneros (ex: o/a artista)' },
+                        { id: 'sobrecomum', label: 'Sobrecomum (ex: a testemunha)' }
+                    ]
+                }
+            ],
+            numero: [
+                {
+                    id: 'n1',
+                    type: 'transform',
+                    question: 'Escreve o plural dos seguintes nomes:',
+                    items: [
+                        { word: 'jornal', answer: 'jornais' },
+                        { word: 'pão', answer: 'pães' },
+                        { word: 'mão', answer: 'mãos' },
+                        { word: 'leão', answer: 'leões' },
+                        { word: 'jardim', answer: 'jardins' }
+                    ]
+                },
+                {
+                    id: 'n2',
+                    type: 'multipleChoice',
+                    question: 'Escolhe o plural correto.',
+                    questions: [
+                        {
+                            question: 'O plural de "o cidadão" é:',
+                            options: ['os cidadãos', 'os cidadães', 'os cidadões'],
+                            correct: 'os cidadãos'
+                        },
+                        {
+                            question: 'O plural de "o funil" é:',
+                            options: ['os funils', 'os funiles', 'os funis'],
+                            correct: 'os funis'
+                        },
+                         {
+                            question: 'Qual é o plural de "o lápis"?',
+                            options: ['os lápis', 'os lápises', 'os lápize'],
+                            correct: 'os lápis'
+                        }
+                    ]
+                },
+                {
+                    id: 'n3',
+                    type: 'complete',
+                    question: 'Completa as frases com o plural do nome entre parênteses.',
+                    sentences: [
+                        { text: 'Comprei vários __________ (cachecol) para o inverno.', answer: 'cachecóis' },
+                        { text: 'Os __________ (país) da Europa são diversos.', answer: 'países' },
+                        { text: 'Os __________ (irmão) dele são gémeos.', answer: 'irmãos' },
+                        { text: 'Caíram vários __________ (papel) ao chão.', answer: 'papéis' }
+                    ]
+                },
+                {
+                    id: 'n4',
+                    type: 'transform',
+                    question: 'Escreve o plural dos seguintes nomes (cuidado com as regras!):',
+                    items: [
+                        { word: 'o atlas', answer: 'os atlas' },
+                        { word: 'o mel', answer: 'os méis' }, // ou "os meles", mas "méis" é mais comum
+                        { word: 'o réptil', answer: 'os répteis' },
+                        { word: 'o bombom', answer: 'os bombons' },
+                        { word: 'o álcool', answer: 'os álcoois' }
+                    ]
+                }
+            ],
+            grau: [
+                {
+                    id: 'gr1',
+                    type: 'classification',
+                    question: 'Identifica o grau dos seguintes nomes:',
+                    items: [
+                        { word: 'rapazelho', correct: 'diminutivo' }, // Pode ter sentido depreciativo
+                        { word: 'casarão', correct: 'aumentativo' },
+                        { word: 'livro', correct: 'normal' },
+                        { word: 'animalzinho', correct: 'diminutivo' },
+                        { word: 'vozeirão', correct: 'aumentativo' },
+                        { word: 'ruela', correct: 'diminutivo' }
+                    ],
+                    options: [
+                        { id: 'normal', label: 'Grau Normal' },
+                        { id: 'aumentativo', label: 'Grau Aumentativo' },
+                        { id: 'diminutivo', label: 'Grau Diminutivo' }
+                    ]
+                },
+                {
+                    id: 'gr2',
+                    type: 'transform',
+                    question: 'Escreve o aumentativo dos seguintes nomes:',
+                    items: [
+                        { word: 'cabeça', answer: 'cabeçorra' }, // ou cabeção
+                        { word: 'fogo', answer: 'fogaréu' }, // <-- ERRO CORRIGIDO AQUI
+                        { word: 'muro', answer: 'muralha' }, // ou murão
+                        { word: 'nariz', answer: 'narigão' }
+                    ]
+                },
+                {
+                    id: 'gr3',
+                    type: 'transform',
+                    question: 'Escreve o diminutivo dos seguintes nomes:',
+                    items: [
+                        { word: 'chuva', answer: 'chuvisco' }, // ou chuvinha
+                        { word: 'rio', answer: 'riacho' }, // ou riozinho
+                        { word: 'flor', answer: 'florzinha' }, // ou florita
+                        { word: 'aldeia', answer: 'aldeola' }
+                    ]
+                },
+                {
+                    id: 'gr4',
+                    type: 'multipleChoice',
+                    question: 'Escolhe a opção correta sobre o grau dos nomes.',
+                    questions: [
+                        {
+                            question: 'A palavra "bocarra" é o aumentativo de:',
+                            options: ['barco', 'boca', 'buraco', 'cabra'],
+                            correct: 'boca'
+                        },
+                        {
+                            question: 'Qual palavra NÃO é um diminutivo?',
+                            options: ['lugarito', 'palacete', 'caixote', 'vielas'],
+                            correct: 'vielas' // É plural, não diminutivo
+                        },
+                         {
+                            question: 'O grau diminutivo pode, por vezes, exprimir...',
+                            options: ['apenas tamanho', 'sempre desprezo', 'carinho ou desprezo', 'apenas carinho'],
+                            correct: 'carinho ou desprezo'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // --- FUNÇÕES UTILITÁRIAS ---
+
+        /**
+         * NOVO: Formata segundos para uma string MM:SS
+         * @param {number} totalSeconds
+         * @returns {string}
+         */
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // --- FUNÇÕES DE NAVEGAÇÃO E RENDERIZAÇÃO ---
+
+        /**
+         * Navega para uma secção diferente da aplicação
+         * @param {string} sectionId - O ID da secção ('menu', 'theory', 'practice', 'results')
+         */
+        function navigateTo(sectionId) {
+            playSound('click');
+            
+            // NOVO: Para o timer se sairmos da secção de prática
+            if (state.currentSection === 'practice' && sectionId !== 'results') {
+                stopModuleTimer();
+            }
+
+            // Esconde todas as secções
+            document.querySelectorAll('.section').forEach(section => {
+                // A secção IA é um modal, não deve ser escondida por esta função
+                if (section.id !== 'section-ai-assistant') {
+                    section.classList.remove('active');
+                }
+            });
+
+            // Mostra a secção desejada
+            const targetSection = document.getElementById(`section-${sectionId}`);
+            if (targetSection) { // Remove a verificação de 'section-ai-assistant' daqui
+                targetSection.classList.add('active');
+            } else {
+                console.error(`Secção não encontrada: ${sectionId}`);
+                document.getElementById('section-menu').classList.add('active'); // Fallback
+            }
+            
+            // REMOVIDO: Lógica de 'ai-assistant' movida para os seus próprios botões
+            // if (sectionId === 'ai-assistant') { ... }
+
+            state.currentSection = sectionId;
+            window.scrollTo(0, 0);
+        }
+
+        /**
+         * Carrega e renderiza o menu principal
+         */
+        function renderMenu() {
+            const modulesContainer = document.getElementById('modules-container');
+            modulesContainer.innerHTML = '';
+            
+            loadProgress(); // Carrega o progresso
+            
+            modules.forEach(module => {
+                const moduleScore = state.progress.scores[module.id];
+                
+                modulesContainer.innerHTML += `
+                    <div
+                        data-module-id="${module.id}"
+                        class="module-card bg-white rounded-2xl shadow-xl p-8 cursor-pointer transform transition-all hover:scale-105 hover:shadow-2xl"
+                    >
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r ${module.color} flex items-center justify-center text-4xl mb-4">
+                            ${module.icon}
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">${module.title}</h3>
+                        <p class="text-gray-600 mb-3">${module.description}</p>
+                        ${(moduleScore !== undefined) ? `
+                            <div class="mt-3 text-sm font-bold text-green-600">
+                                ⭐ Melhor: ${moduleScore}%
+                            </div>
+                        ` : ''}
+                        <div class="mt-4 flex items-center text-indigo-600 font-semibold">
+                            Começar
+                            <!-- Ícone Seta Direita SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ml-2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Adiciona event listeners aos módulos
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    selectModule(card.dataset.moduleId);
+                });
+            });
+
+            // Verifica se pode ativar o botão de certificado
+            const certificateBtn = document.getElementById('certificate-btn');
+            const scores = state.progress.scores;
+            // Verifica se CADA módulo definido em 'modules' tem uma pontuação
+            const allModulesDone = modules.every(module => scores[module.id] !== undefined);
+
+            if (!allModulesDone || !state.studentName) {
+                certificateBtn.disabled = true;
+                let title = !state.studentName ? 'Escreve o teu nome para ativares o certificado.' : 'Completa todos os 4 módulos para veres o certificado.';
+                certificateBtn.setAttribute('title', title);
+            } else {
+                certificateBtn.disabled = false;
+                certificateBtn.setAttribute('title', 'Vê o teu certificado de conclusão!');
+            }
+            
+            // Atualiza a saudação do nome
+            updateWelcomeMessage();
+        }
+
+        /**
+         * Atualiza a mensagem de boas-vindas com o nome do aluno
+         */
+        function updateWelcomeMessage() {
+            const nameInputContainer = document.getElementById('name-input-container');
+            const welcomeMessageContainer = document.getElementById('welcome-message-container');
+            
+            if (state.studentName) {
+                nameInputContainer.classList.add('hidden');
+                welcomeMessageContainer.classList.remove('hidden');
+                document.getElementById('student-name-display').textContent = state.studentName;
+            } else {
+                nameInputContainer.classList.remove('hidden');
+                welcomeMessageContainer.classList.add('hidden');
+                document.getElementById('student-name-input').value = '';
+            }
+            
+            // Re-renderiza o menu para atualizar o estado do botão do certificado
+            if(state.currentSection === 'menu') {
+                // Chama uma versão mais leve do renderMenu para evitar loop
+                const certificateBtn = document.getElementById('certificate-btn');
+                const scores = state.progress.scores;
+                const allModulesDone = modules.every(module => scores[module.id] !== undefined);
+
+                if (!allModulesDone || !state.studentName) {
+                    certificateBtn.disabled = true;
+                    let title = !state.studentName ? 'Escreve o teu nome para ativares o certificado.' : 'Completa todos os 4 módulos para veres o certificado.';
+                    certificateBtn.setAttribute('title', title);
+                } else {
+                    certificateBtn.disabled = false;
+                    certificateBtn.setAttribute('title', 'Vê o teu certificado de conclusão!');
+                }
+            }
+        }
+        
+        /**
+         * Seleciona um módulo e navega para a teoria
+         * @param {string} moduleId
+         */
+        function selectModule(moduleId) {
+            state.selectedModule = moduleId;
+            state.currentActivity = 0;
+            state.moduleAnswers = [];
+            state.activityAnswers = {};
+            
+            renderTheory();
+            navigateTo('theory');
+        }
+
+        /**
+         * Renderiza o conteúdo da teoria para o módulo selecionado
+         */
+        function renderTheory() {
+            const content = theoryContent[state.selectedModule];
+            const theoryContainer = document.getElementById('theory-content');
+            
+            let html = `
+                <div class="flex items-center mb-6">
+                    <!-- Ícone Faísca SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-yellow-500 mr-3"><path d="M12 2L14.39 8.39L21 9.61L16.5 14.5L18 21.02L12 17.77L6 21.02L7.5 14.5L3 9.61L9.61 8.39L12 2z"></path></svg>
+                    <h2 class="text-3xl font-bold text-gray-800">${content.title}</h2>
+                </div>
+            `;
+            
+            content.sections.forEach(section => {
+                html += `
+                    <div class="mb-8 last:mb-0">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-3">${section.subtitle}</h3>
+                        <p class="text-gray-700 mb-4">${section.content}</p>
+                        <div class="bg-indigo-50 rounded-lg p-4">
+                            <p class="font-semibold text-gray-700 mb-2">Exemplos:</p>
+                            <ul class="space-y-1 list-disc list-inside">
+                                ${section.examples.map(example => `<li class="text-gray-700">${example}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            theoryContainer.innerHTML = html;
+        }
+
+        /**
+         * Inicia a prática, navegando para a primeira atividade
+         */
+        function startPractice() {
+            state.currentActivity = 0;
+            state.moduleAnswers = [];
+            
+            // NOVO: Inicia o Timer
+            if (state.timerEnabled) {
+                state.moduleStartTime = Date.now();
+                state.moduleTimeTaken = 0;
+                document.getElementById('timer-display').classList.remove('hidden');
+                state.timerIntervalId = setInterval(updateTimerDisplay, 1000);
+                updateTimerDisplay(); // Mostra 00:00 imediatamente
+            }
+            
+            renderActivity();
+            navigateTo('practice');
+        }
+
+        /**
+         * NOVO: Para o timer do módulo
+         */
+        function stopModuleTimer() {
+            if (state.timerIntervalId) {
+                clearInterval(state.timerIntervalId);
+                state.timerIntervalId = null;
+            }
+            document.getElementById('timer-display').classList.add('hidden');
+            document.getElementById('timer-display').textContent = '00:00';
+            state.moduleStartTime = null;
+        }
+
+        /**
+         * NOVO: Atualiza o display do timer a cada segundo
+         */
+        function updateTimerDisplay() {
+            let elapsedSeconds = 0;
+            if (state.moduleStartTime) {
+                elapsedSeconds = Math.floor((Date.now() - state.moduleStartTime) / 1000);
+            }
+            document.getElementById('timer-display').textContent = formatTime(elapsedSeconds);
+        }
+        
+        /**
+         * Renderiza a atividade atual
+         */
+        function renderActivity() {
+            const moduleActivities = activities[state.selectedModule];
+            const activity = moduleActivities[state.currentActivity];
+            
+            if (!activity) return;
+
+            state.activityAnswers = {}; // Limpa respostas da atividade anterior
+            
+            const activityContainer = document.getElementById('activity-content');
+            let html = `<h3 class="text-2xl font-bold text-gray-800 mb-6">${activity.question}</h3>`;
+            
+            if(activity.note) {
+                 html += `<p class="text-sm text-gray-500 italic mb-4">${activity.note}</p>`;
+            }
+
+            switch (activity.type) {
+                case 'classification':
+                    html += renderClassificationActivity(activity);
+                    break;
+                case 'transform':
+                    html += renderTransformActivity(activity);
+                    break;
+                case 'complete':
+                    html += renderCompleteActivity(activity);
+                    break;
+                case 'multipleChoice':
+                    html += renderMultipleChoiceActivity(activity);
+                    break;
+                case 'association':
+                    html += renderAssociationActivity(activity);
+                    break;
+            }
+            
+            activityContainer.innerHTML = html;
+            
+            // Atualiza navegação e barra de progresso
+            updateActivityNavigation();
+            updateProgressBar();
+            
+            // Adiciona event listeners aos inputs
+            addActivityListeners();
+        }
+        
+        // --- FUNÇÕES DE RENDERIZAÇÃO DE ATIVIDADES ---
+
+        function renderClassificationActivity(activity) {
+            let html = '<div class="space-y-6">';
+            activity.items.forEach((item, idx) => {
+                const word = item.word || (item.sentence.match(/<strong>(.*?)<\/strong>/) ? item.sentence : `"${item.sentence}"`);
+                
+                html += `
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200">
+                        <p class="text-xl font-bold text-gray-800 mb-4">${item.sentence ? item.sentence : item.word}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" data-item-index="${idx}">
+                            ${activity.options.map(option => `
+                                <button
+                                    data-answer-id="${option.id}"
+                                    class="activity-option p-4 rounded-lg border-2 border-gray-200 hover:border-indigo-300 transition-all text-left"
+                                >
+                                    ${option.label}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderTransformActivity(activity) {
+            let html = '<div class="space-y-6">';
+            activity.items.forEach((item, idx) => {
+                html += `
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200">
+                        <p class="text-lg text-gray-700 mb-3">
+                            <span class="font-bold text-indigo-600">${item.word}</span> →
+                        </p>
+                        <input
+                            type="text"
+                            data-item-index="${idx}"
+                            class="activity-input w-full p-4 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none text-lg"
+                            placeholder="Escreve a resposta..."
+                            autocomplete="off"
+                            autocorrect="off"
+                            spellcheck="false"
+                        />
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderCompleteActivity(activity) {
+            let html = '<div class="space-y-6">';
+            if (activity.options) {
+                 html += `<div class="p-4 bg-indigo-50 rounded-lg text-center"><strong>Opções:</strong> ${activity.options.join(' | ')}</div>`;
+            }
+            
+            activity.sentences.forEach((sentence, idx) => {
+                html += `
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200">
+                        <p class="text-lg text-gray-700 mb-2">${sentence.text.replace('__________', `<span class="font-bold text-indigo-600">[lacuna]</span>`)}</p>
+                        ${sentence.hint ? `<p class="text-sm text-gray-500 mb-3">${sentence.hint}</p>` : ''}
+                        <input
+                            type="text"
+                            data-item-index="${idx}"
+                            class="activity-input w-full p-4 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none text-lg"
+                            placeholder="Escreve a palavra..."
+                            autocomplete="off"
+                            autocorrect="off"
+                            spellcheck="false"
+                        />
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderMultipleChoiceActivity(activity) {
+            let html = '<div class="space-y-6">';
+            activity.questions.forEach((q, idx) => {
+                html += `
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200">
+                        <p class="text-lg font-bold text-gray-800 mb-4">${q.question}</p>
+                        <div class="grid grid-cols-1 gap-3" data-item-index="${idx}">
+                            ${q.options.map(option => {
+                                // Remove duplicados se houver (ex: 'imperatriz')
+                                return option;
+                            }).filter((v, i, a) => a.indexOf(v) === i).map(option => `
+                                <button
+                                    data-answer-id="${option}"
+                                    class="activity-option p-4 rounded-lg border-2 border-gray-200 hover:border-indigo-300 transition-all text-left"
+                                >
+                                    ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        function renderAssociationActivity(activity) {
+            let html = '<div class="space-y-6">';
+            // Baralhar as opções da direita
+            const shuffledOptions = [...activity.options].sort(() => Math.random() - 0.5);
+            
+            activity.pairs.forEach((pair, idx) => {
+                html += `
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-200 flex items-center justify-between gap-4">
+                        <span class="text-lg font-bold text-indigo-600">${pair.item}</span>
+                        <span class="text-gray-400">→</span>
+                        <select
+                            data-item-index="${idx}"
+                            class="activity-input block w-1/2 p-4 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none text-lg"
+                        >
+                            <option value="">Seleciona...</option>
+                            ${shuffledOptions.map(option => `
+                                <option value="${option}">${option}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        // --- LÓGICA DE INTERAÇÃO DAS ATIVIDADES ---
+        
+        /**
+         * Adiciona event listeners aos elementos da atividade atual
+         */
+        function addActivityListeners() {
+            const activity = activities[state.selectedModule][state.currentActivity];
+            
+            // Botões de opção (Classification, MultipleChoice)
+            document.querySelectorAll('.activity-option').forEach(button => {
+                button.addEventListener('click', () => {
+                    playSound('click');
+                    const itemIndex = button.closest('[data-item-index]').dataset.itemIndex;
+                    const answerId = button.dataset.answerId;
+                    
+                    state.activityAnswers[itemIndex] = answerId;
+                    
+                    // Atualiza feedback visual (destaca selecionado)
+                    button.closest('[data-item-index]').querySelectorAll('.activity-option').forEach(btn => {
+                        btn.classList.remove('border-indigo-600', 'bg-indigo-50');
+                    });
+                    button.classList.add('border-indigo-600', 'bg-indigo-50');
+                });
+            });
+
+            // Inputs de texto (Transform, Complete, Association)
+            document.querySelectorAll('.activity-input').forEach(input => {
+                input.addEventListener('input', () => {
+                    const itemIndex = input.dataset.itemIndex;
+                    state.activityAnswers[itemIndex] = input.value.trim().toLowerCase();
+                });
+            });
+        }
+        
+        /**
+         * Atualiza os botões de navegação da atividade
+         */
+        function updateActivityNavigation() {
+            const navigationContainer = document.getElementById('activity-navigation');
+            const moduleActivities = activities[state.selectedModule];
+            const isLastActivity = state.currentActivity === moduleActivities.length - 1;
+            
+            let html = '';
+            
+            if (state.currentActivity > 0) {
+                html += `
+                    <button
+                        id="prev-activity-btn"
+                        class="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300 transition-all flex items-center justify-center"
+                    >
+                        <!-- Ícone Seta Esquerda SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Anterior
+                    </button>
+                `;
+            }
+            
+            html += `
+                <button
+                    id="check-activity-btn"
+                    class="flex-1 ${isLastActivity ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-500 hover:bg-green-600'} text-white py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center"
+                >
+                    ${isLastActivity ? 
+                        `<!-- Ícone Fim SVG -->
+                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                         Verificar Respostas Finais` 
+                    : 
+                        `<!-- Ícone Check SVG -->
+                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                         Verificar`
+                    }
+                </button>
+            `;
+            
+            // Botão "Próxima" (escondido, aparece depois de verificar)
+            html += `
+                <button
+                    id="next-activity-btn"
+                    class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hidden flex items-center justify-center"
+                >
+                    ${state.currentActivity < moduleActivities.length - 1 ? 'Próxima Atividade' : 'Ver Resultados Finais 🎯'}
+                    <!-- Ícone Seta Direita SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ml-2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            `;
+            
+            navigationContainer.innerHTML = html;
+            
+            // Adiciona event listeners aos novos botões
+            document.getElementById('check-activity-btn').addEventListener('click', checkCurrentActivity);
+            
+            const prevBtn = document.getElementById('prev-activity-btn');
+            if(prevBtn) prevBtn.addEventListener('click', prevActivity);
+            
+            const nextBtn = document.getElementById('next-activity-btn');
+            if(nextBtn) nextBtn.addEventListener('click', nextActivity);
+        }
+        
+        /**
+         * Atualiza a barra de progresso
+         */
+        function updateProgressBar() {
+            const moduleActivities = activities[state.selectedModule];
+            const percent = ((state.currentActivity + 1) / moduleActivities.length) * 100;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            
+            document.getElementById('current-activity-number').textContent = state.currentActivity + 1;
+            document.getElementById('total-activity-number').textContent = moduleActivities.length;
+        }
+
+        /**
+         * Verifica as respostas da atividade atual e dá feedback
+         */
+        function checkCurrentActivity() {
+            const moduleActivities = activities[state.selectedModule];
+            const activity = moduleActivities[state.currentActivity];
+            let allCorrect = true;
+            let activityScore = {
+                id: activity.id,
+                question: activity.question,
+                items: []
+            };
+
+            const inputs = document.querySelectorAll('.activity-input, .activity-option');
+            inputs.forEach(input => input.disabled = true); // Desativa inputs
+            
+            const checkButton = document.getElementById('check-activity-btn');
+            if(checkButton) checkButton.classList.add('hidden');
+            
+            const isLastActivity = state.currentActivity === moduleActivities.length - 1;
+
+            if (isLastActivity) {
+                // Não mostra o botão "Próxima", vamos calcular e navegar diretamente
+            } else {
+                // Não é a última, mostra o botão "Próxima Atividade"
+                const nextButton = document.getElementById('next-activity-btn');
+                if(nextButton) nextButton.classList.remove('hidden');
+            }
+
+
+            // --- LÓGICA DE VERIFICAÇÃO ---
+            
+            if (activity.type === 'classification') {
+                activity.items.forEach((item, idx) => {
+                    const userAnswer = state.activityAnswers[idx];
+                    const isCorrect = (userAnswer === item.correct);
+                    activityScore.items.push({ text: item.word || item.sentence, userAnswer, correctAnswer: item.correct, isCorrect });
+                    
+                    const itemContainer = document.querySelector(`[data-item-index="${idx}"]`);
+                    if (itemContainer) {
+                        if (userAnswer) {
+                            const userButton = itemContainer.querySelector(`[data-answer-id="${userAnswer}"]`);
+                            userButton.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+                            // Se errado, mostra o correto
+                            if(!isCorrect) {
+                                const correctButton = itemContainer.querySelector(`[data-answer-id="${item.correct}"]`);
+                                if (correctButton) correctButton.classList.add('correct-answer');
+                            }
+                        } else {
+                            // Não respondeu, marca como errado e mostra correto
+                            const correctButton = itemContainer.querySelector(`[data-answer-id="${item.correct}"]`);
+                            if (correctButton) correctButton.classList.add('correct-answer');
+                            allCorrect = false;
+                        }
+                    }
+                    if (!isCorrect) allCorrect = false;
+                });
+            }
+            
+            else if (activity.type === 'transform' || activity.type === 'complete') {
+                const items = activity.items || activity.sentences;
+                items.forEach((item, idx) => {
+                    const correctAnswer = (item.answer).toLowerCase();
+                    const userAnswer = state.activityAnswers[idx] || ''; // Já está em lowercase
+                    const isCorrect = (userAnswer === correctAnswer);
+                    activityScore.items.push({ text: item.word || item.text, userAnswer, correctAnswer, isCorrect });
+
+                    const input = document.querySelector(`[data-item-index="${idx}"]`);
+                    if (input) {
+                        input.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+                        if (!isCorrect) {
+                            // Mostra a resposta correta
+                            let feedback = document.createElement('p');
+                            feedback.className = 'text-green-600 font-semibold mt-2';
+                            feedback.textContent = `Correto: ${correctAnswer}`;
+                            input.after(feedback);
+                        }
+                    }
+                    if (!isCorrect) allCorrect = false;
+                });
+            }
+            
+            else if (activity.type === 'multipleChoice') {
+                activity.questions.forEach((q, idx) => {
+                    const userAnswer = state.activityAnswers[idx];
+                    const isCorrect = (userAnswer === q.correct);
+                    activityScore.items.push({ text: q.question, userAnswer, correctAnswer: q.correct, isCorrect });
+
+                    const itemContainer = document.querySelector(`[data-item-index="${idx}"]`);
+                    if (itemContainer) {
+                        if (userAnswer) {
+                            const userButton = itemContainer.querySelector(`[data-answer-id="${userAnswer}"]`);
+                            userButton.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+                        }
+                        // Mostra sempre o correto
+                        const correctButton = itemContainer.querySelector(`[data-answer-id="${q.correct}"]`);
+                        if (correctButton) correctButton.classList.add('correct-answer');
+                    }
+                    if (!isCorrect) allCorrect = false;
+                });
+            }
+            
+            else if (activity.type === 'association') {
+                 activity.pairs.forEach((pair, idx) => {
+                    const correctAnswer = pair.match;
+                    const userAnswer = state.activityAnswers[idx] || ''; // Já está em lowercase
+                    const isCorrect = (userAnswer.toLowerCase() === correctAnswer.toLowerCase());
+                    activityScore.items.push({ text: pair.item, userAnswer, correctAnswer, isCorrect });
+
+                    const input = document.querySelector(`[data-item-index="${idx}"]`);
+                    if (input) {
+                        input.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+                        if (!isCorrect) {
+                            let feedback = document.createElement('p');
+                            feedback.className = 'text-green-600 font-semibold mt-2';
+                            feedback.textContent = `Correto: ${correctAnswer}`;
+                            input.after(feedback);
+                        }
+                    }
+                    if (!isCorrect) allCorrect = false;
+                });
+            }
+
+            // Toca som e guarda resultado
+            playSound(allCorrect ? 'correct' : 'wrong');
+            state.moduleAnswers.push(activityScore);
+            
+            if (isLastActivity) {
+                // NOVO: Para o timer e calcula o tempo final
+                if (state.timerEnabled && state.moduleStartTime) {
+                    state.moduleTimeTaken = Math.floor((Date.now() - state.moduleStartTime) / 1000);
+                }
+                stopModuleTimer();
+
+                // Agora que as respostas estão guardadas, calcula e navega
+                setTimeout(() => {
+                    calculateResults();
+                    navigateTo('results');
+                }, 500); // 0.5 segundos de delay
+            }
+        }
+
+        /**
+         * Vai para a atividade anterior
+         */
+        function prevActivity() {
+            playSound('click');
+            if (state.currentActivity > 0) {
+                state.currentActivity--;
+                // Remove o resultado da atividade para onde vamos (para poder ser refeita)
+                state.moduleAnswers.pop(); 
+                // Remove o resultado da atividade que acabámos (se voltarmos)
+                if (state.moduleAnswers.length > state.currentActivity) {
+                   state.moduleAnswers.pop();
+                }
+                renderActivity();
+            }
+        }
+        
+        /**
+         * Vai para a próxima atividade ou para os resultados
+         */
+        function nextActivity() {
+            playSound('click');
+            const moduleActivities = activities[state.selectedModule];
+            
+            if (state.currentActivity < moduleActivities.length - 1) {
+                state.currentActivity++;
+                renderActivity();
+            } else {
+                // Esta parte agora é chamada automaticamente pela checkCurrentActivity
+                // Mas mantemos para o caso de algum fluxo antigo (não deve acontecer)
+                
+                // NOVO: Para o timer (fallback, caso não tenha sido parado)
+                if (state.timerEnabled && state.moduleStartTime) {
+                    state.moduleTimeTaken = Math.floor((Date.now() - state.moduleStartTime) / 1000);
+                }
+                stopModuleTimer();
+                
+                calculateResults();
+                navigateTo('results');
+            }
+        }
+        
+        // --- CÁLCULO E EXIBIÇÃO DE RESULTADOS ---
+
+        /**
+         * Calcula a pontuação final e renderiza a secção de resultados
+         */
+        function calculateResults() {
+            let totalQuestions = 0;
+            let correctAnswers = 0;
+            let summaryHtml = '';
+
+            state.moduleAnswers.forEach(activity => {
+                summaryHtml += `<div class="mb-4 p-4 bg-white rounded border">`;
+                summaryHtml += `<h4 class="font-bold text-gray-700 mb-2">${activity.question}</h4>`;
+                
+                activity.items.forEach(item => {
+                    totalQuestions++;
+                    if (item.isCorrect) {
+                        correctAnswers++;
+                        summaryHtml += `
+                            <div class="flex items-center text-green-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 flex-shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span class="text-sm">${item.text}: ${item.userAnswer || 'N/A'}</span>
+                            </div>
+                        `;
+                    } else {
+                        summaryHtml += `
+                            <div class="flex items-start text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 mt-1 flex-shrink-0"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                <span class="text-sm">
+                                    <strong>${item.text}:</strong> 
+                                    <span class="line-through">${item.userAnswer || 'N/A'}</span>
+                                    <span class="font-bold text-green-700"> (Correto: ${item.correctAnswer})</span>
+                                </span>
+                            </div>
+                        `;
+                    }
+                });
+                
+                summaryHtml += `</div>`;
+            });
+            
+            const score = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            
+            // Atualiza UI dos Resultados
+            const scoreEl = document.getElementById('results-score');
+            const messageEl = document.getElementById('results-message');
+            const trophyEl = document.getElementById('results-trophy');
+            
+            scoreEl.textContent = `${score}%`;
+
+            // NOVO: Mostra o tempo gasto
+            const timeEl = document.getElementById('results-time');
+            if (state.moduleTimeTaken > 0) {
+                const minutes = Math.floor(state.moduleTimeTaken / 60);
+                const seconds = state.moduleTimeTaken % 60;
+                timeEl.textContent = `Tempo: ${minutes > 0 ? `${minutes} min e ` : ''}${seconds} seg`;
+                timeEl.classList.remove('hidden');
+            } else {
+                timeEl.classList.add('hidden');
+            }
+            
+            if (score >= 90) {
+                messageEl.textContent = 'Excelente trabalho! És uma estrela! 🌟';
+                scoreEl.className = 'text-6xl font-bold mb-6 text-green-500';
+                trophyEl.className = 'w-24 h-24 mx-auto mb-6 text-yellow-400';
+                showConfetti();
+            } else if (score >= 70) {
+                messageEl.textContent = 'Muito bem! Continua assim! 👏';
+                scoreEl.className = 'text-6xl font-bold mb-6 text-green-500';
+                trophyEl.className = 'w-24 h-24 mx-auto mb-6 text-yellow-400';
+                showConfetti(100); // Menos confetti
+            } else if (score >= 50) {
+                messageEl.textContent = 'Bom trabalho! Pratica mais um pouco. 💪';
+                scoreEl.className = 'text-6xl font-bold mb-6 text-yellow-500';
+                trophyEl.className = 'w-24 h-24 mx-auto mb-6 text-gray-400';
+            } else {
+                messageEl.textContent = 'Não desanimes! Revê a teoria e tenta novamente. 📚';
+                scoreEl.className = 'text-6xl font-bold mb-6 text-red-500';
+                trophyEl.className = 'w-24 h-24 mx-auto mb-6 text-gray-400';
+            }
+            
+            // Mostra nome e resumo
+            if (state.studentName) {
+                document.getElementById('results-name-summary').classList.remove('hidden');
+                document.getElementById('results-student-name').textContent = state.studentName;
+            } else {
+                document.getElementById('results-name-summary').classList.add('hidden');
+            }
+            
+            document.getElementById('answers-summary-content').innerHTML = summaryHtml;
+            
+            // Guarda a melhor pontuação E O MELHOR TEMPO
+            saveProgress(state.selectedModule, score, state.moduleTimeTaken);
+            
+            // Limpa o tempo do módulo atual
+            state.moduleTimeTaken = 0;
+            
+            // Atualiza o menu principal para o caso de o botão do certificado
+            // ficar disponível agora.
+            renderMenu();
+        }
+        
+        /**
+         * NOVO: Renderiza o certificado final
+         */
+        function renderCertificate() {
+            const name = state.studentName;
+            const scores = state.progress.scores;
+            const times = state.progress.times; // NOVO
+            const today = new Date();
+            const dateString = today.toLocaleDateString('pt-PT', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            document.getElementById('certificate-name').textContent = name;
+            document.getElementById('certificate-date').textContent = dateString;
+
+            const scoresContainer = document.getElementById('certificate-scores');
+            scoresContainer.innerHTML = '';
+            
+            let totalScore = 0;
+            let moduleCount = 0;
+
+            modules.forEach(module => {
+                const score = scores[module.id] || 0;
+                const bestTime = times[module.id]; // NOVO
+                totalScore += score;
+                moduleCount++;
+                
+                scoresContainer.innerHTML += `
+                    <div class="flex justify-between items-center p-2 bg-gray-100 rounded">
+                        <span class="font-semibold text-gray-700">${module.title}:</span>
+                        <div class="flex items-center">
+                            <!-- NOVO: Mostra melhor tempo -->
+                            ${bestTime ? `
+                                <span class="font-semibold text-gray-500 text-sm mr-3">
+                                    (Melhor tempo: ${formatTime(bestTime)})
+                                </span>
+                            ` : ''}
+                            <span class="font-bold text-lg ${score >= 70 ? 'text-green-600' : 'text-yellow-600'}">${score}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const average = moduleCount > 0 ? Math.round(totalScore / moduleCount) : 0;
+            scoresContainer.innerHTML += `
+                <div class="flex justify-between items-center p-3 bg-indigo-100 rounded mt-4">
+                    <span class="font-bold text-indigo-800 text-lg">Média Final:</span>
+                    <span class="font-bold text-indigo-800 text-lg">${average}%</span>
+                </div>
+            `;
+        }
+        
+        // --- CONFETTI ---
+        
+        function showConfetti(amount = 200) {
+            const container = document.getElementById('confetti-container');
+            container.innerHTML = ''; // Limpa confetti anterior
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
+            
+            for (let i = 0; i < amount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+                
+                // Animação CSS
+                confetti.style.animation = `confetti ${Math.random() * 3 + 2}s linear forwards`;
+                
+                container.appendChild(confetti);
+            }
+            
+            // Limpa após a animação
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+        
+        // --- GESTÃO DE DADOS (localStorage) ---
+        
+        const PROGRESS_KEY = 'nomeAppProgress_v2';
+        
+        /**
+         * NOVO: Salva progresso de pontuação E tempo
+         * @param {string} moduleName
+         * @param {number} scoreValue
+         * @param {number} timeValue - Tempo em segundos
+         */
+        function saveProgress(moduleName, scoreValue, timeValue) {
+            if (moduleName) {
+                // Guarda a melhor pontuação
+                if (scoreValue !== undefined) {
+                    const currentBestScore = state.progress.scores[moduleName] || 0;
+                    state.progress.scores[moduleName] = Math.max(currentBestScore, scoreValue);
+                }
+                
+                // NOVO: Guarda o melhor tempo (mais baixo)
+                if (timeValue !== undefined && timeValue > 0) {
+                    if (!state.progress.times) state.progress.times = {};
+                    const currentBestTime = state.progress.times[moduleName] || Infinity;
+                    if (timeValue < currentBestTime) {
+                        state.progress.times[moduleName] = timeValue;
+                    }
+                }
+            }
+            
+            if (state.studentName) {
+                state.progress.studentName = state.studentName;
+            }
+            
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(state.progress));
+        }
+        
+        function loadProgress() {
+            const saved = localStorage.getItem(PROGRESS_KEY);
+            if (saved) {
+                state.progress = JSON.parse(saved);
+                if (state.progress.studentName) {
+                    state.studentName = state.progress.studentName;
+                }
+                if (!state.progress.scores) {
+                    state.progress.scores = {};
+                }
+                if (!state.progress.times) { // NOVO
+                    state.progress.times = {};
+                }
+            } else {
+                state.progress = { scores: {}, times: {} }; // NOVO
+            }
+        }
+        
+        // --- FUNCIONALIDADE DE IMPRESSÃO ---
+        
+        function generatePrintableSheets() {
+            const printContent = document.getElementById('print-content');
+            printContent.innerHTML = ''; // Limpa conteúdo anterior
+            
+            let html = '';
+            
+            modules.forEach(module => {
+                const theory = theoryContent[module.id];
+                const moduleActivities = activities[module.id];
+
+                // Título do Módulo
+                html += `<div class="print-module-title">${module.title}</div>`;
+                
+                // Teoria
+                html += `<div class="print-theory">`;
+                html += `<h3 class="print-activity-title">Teoria</h3>`;
+                theory.sections.forEach(section => {
+                    html += `<h4>${section.subtitle}</h4>`;
+                    html += `<p>${section.content}</p>`;
+                    html += `<ul>${section.examples.map(ex => `<li>${ex}</li>`).join('')}</ul>`;
+                });
+                html += `</div>`;
+                
+                // Atividades
+                html += `<div class="print-activities">`;
+                moduleActivities.forEach((activity, idx) => {
+                    html += `<h3 class="print-activity-title">Atividade ${idx + 1}: ${activity.question}</h3>`;
+                    
+                    if (activity.type === 'classification') {
+                        html += activity.items.map(item => `
+                            <div class="item">
+                                <strong>${item.word || item.sentence.replace(/<strong>.*?<\/strong>/, `[${item.word}]`)}</strong>: 
+                                ${activity.options.map(opt => `
+                                    <span class="print-choice"><span class="print-choice-box"></span> ${opt.label}</span>
+                                `).join('')}
+                            </div>
+                        `).join('');
+                    }
+                    
+                    else if (activity.type === 'transform') {
+                        html += activity.items.map(item => `
+                            <div class="item">
+                                <strong>${item.word}</strong> → <span class="print-answer-line"></span>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    else if (activity.type === 'complete') {
+                        html += activity.sentences.map(item => `
+                            <div class="item">
+                                ${item.text.replace('__________', '<span class="print-answer-line"></span>')}
+                                ${item.hint ? ` <em>(${item.hint})</em>` : ''}
+                            </div>
+                        `).join('');
+                    }
+                    
+                    else if (activity.type === 'multipleChoice') {
+                         html += activity.questions.map(q => `
+                            <div class="item">
+                                <p><strong>${q.question}</strong></p>
+                                ${q.options.map(opt => `
+                                    <span class="print-choice"><span class="print-choice-box"></span> ${opt}</span>
+                                `).join('<br>')}
+                            </div>
+                        `).join('');
+                    }
+                    
+                    else if (activity.type === 'association') {
+                         html += activity.pairs.map(pair => `
+                            <div class="item">
+                                <strong>${pair.item}</strong> → <span class="print-answer-line"></span>
+                            </div>
+                        `).join('');
+                         html += `<p><em>Opções: ${activity.options.join(', ')}</em></p>`;
+                    }
+                    
+                });
+                html += `</div>`;
+            });
+            
+            printContent.innerHTML = html;
+            
+            // CORREÇÃO: Adiciona a classe e imprime, depois remove com delay
+            document.body.classList.add('printing-sheets');
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove('printing-sheets');
+            }, 1000); // 1 segundo de delay
+        }
+        
+        // --- NOVO: FUNÇÕES DO ASSISTENTE IA ---
+
+        /** Adiciona uma mensagem à janela do chat */
+        function addMessageToAIChat(message, sender, sources = null) {
+            const chatHistory = document.getElementById('ai-chat-history');
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageDiv.className = 'user-message';
+                messageDiv.innerHTML = `<div class="user-message-bubble">${message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>`;
+            } else {
+                messageDiv.className = 'ai-message';
+                let sourceHTML = '';
+                if (sources && sources.length > 0) {
+                    sourceHTML = '<div class="ai-sources"><strong>Fontes:</strong><ul>' +
+                        sources.map(s => `<li><a href="${s.uri}" target="_blank" rel="noopener noreferrer">${s.title}</a></li>`).join('') +
+                        '</ul></div>';
+                }
+                
+                messageDiv.innerHTML = `
+                    <div class="ai-message-bubble ${sources ? 'ai-message-bubble-grounded' : ''}">
+                        ${message.replace(/\n/g, '<br>')}
+                        ${sourceHTML}
+                    </div>`;
+            }
+            
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll
+        }
+
+        /** Gere o envio da mensagem do utilizador */
+        async function handleAISend() {
+            const input = document.getElementById('ai-input');
+            const userMessage = input.value.trim();
+            
+            if (!userMessage) return;
+            
+            playSound('click');
+            addMessageToAIChat(userMessage, 'user');
+            input.value = '';
+            
+            document.getElementById('ai-loading').classList.remove('hidden');
+            document.getElementById('ai-send-btn').disabled = true;
+
+            try {
+                const useSearch = document.getElementById('ai-search-checkbox').checked;
+                const response = await callGeminiAPI(userMessage, useSearch);
+                addMessageToAIChat(response.text, 'ai', response.sources);
+            } catch (error) {
+                console.error('Erro ao chamar a API Gemini:', error);
+                addMessageToAIChat('Desculpa, ocorreu um erro ao tentar contactar o assistente. Tenta novamente.', 'ai');
+            }
+            
+            document.getElementById('ai-loading').classList.add('hidden');
+            document.getElementById('ai-send-btn').disabled = false;
+        }
+        
+        // --- NOVO: Constantes da API Gemini ---
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=';
+        const API_KEY = ""; // Deixar em branco, será fornecida pelo ambiente
+        const SYSTEM_PROMPT = "És um assistente de gramática, um professor de Português (Portugal) simpático e pedagógico. Ajudas alunos do 5º e 6º ano a compreender as classes de nomes. Responde de forma clara, concisa e dá exemplos simples. Foca-te apenas em gramática portuguesa. Se o utilizador pedir para encontrar exemplos em notícias ou na web, usa as ferramentas de pesquisa para encontrar artigos reais e relevantes.";
+
+
+        /** Chama a API Gemini com o prompt e controlo de pesquisa */
+        async function callGeminiAPI(userMessage, useSearch = false, retryCount = 0) {
+            const maxRetries = 3;
+            const apiKey = API_KEY; 
+            const apiUrl = GEMINI_API_URL + apiKey;
+
+            const payload = {
+                contents: [{ parts: [{ text: userMessage }] }],
+                systemInstruction: {
+                    parts: [{ text: SYSTEM_PROMPT }]
+                }
+            };
+
+            if (useSearch) {
+                payload.tools = [{ "google_search": {} }];
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    // Handle non-OK responses (e.g., 429 Too Many Requests)
+                    if (response.status === 429 && retryCount < maxRetries) {
+                        const delay = Math.pow(2, retryCount) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return callGeminiAPI(userMessage, useSearch, retryCount + 1);
+                    }
+                    throw new Error(`API respondeu com status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                const candidate = result.candidates?.[0];
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    
+                    let sources = [];
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                    }
+                    
+                    return { text, sources };
+                } else {
+                    // Tenta lidar com respostas bloqueadas
+                    if (candidate && candidate.finishReason === 'SAFETY' || candidate.finishReason === 'OTHER') {
+                        return { text: "Não posso responder a esse pedido. Tenta reformular a tua pergunta focado na gramática.", sources: [] };
+                    }
+                    throw new Error('Resposta da API inválida ou sem conteúdo.');
+                }
+            } catch (error) {
+                // Handle network errors or fetch failures
+                if (retryCount < maxRetries) {
+                    const delay = Math.pow(2, retryCount) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return callGeminiAPI(userMessage, useSearch, retryCount + 1);
+                }
+                console.error('Falha na API após retentativas:', error);
+                throw error;
+            }
+        }
+
+
+        // --- INICIALIZAÇÃO E EVENT LISTENERS GLOBAIS ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializa a aplicação no menu
+            renderMenu();
+            
+            // --- Event Listeners Globais ---
+            
+            // Input do nome
+            document.getElementById('student-name-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const name = e.target.value.trim();
+                    if (name) {
+                        state.studentName = name;
+                        saveProgress();
+                        updateWelcomeMessage();
+                    }
+                }
+            });
+            document.getElementById('student-name-input').addEventListener('blur', (e) => {
+                const name = e.target.value.trim();
+                if (name) {
+                    state.studentName = name;
+                    saveProgress();
+                    updateWelcomeMessage();
+                }
+            });
+            
+            // Botão Mudar Nome
+            document.getElementById('change-name-btn').addEventListener('click', () => {
+                state.studentName = '';
+                state.progress.studentName = '';
+                saveProgress(); // Salva a remoção do nome
+                updateWelcomeMessage();
+            });
+
+            // Botão Toggle Sound
+            document.getElementById('toggle-sound-btn').addEventListener('click', () => {
+                // Tenta inicializar os sons na primeira interação (REMOVIDO - Agora é feito em playSound)
+                /*
+                if (!correctSound) {
+                    initSounds();
+                }
+                */
+
+                state.soundEnabled = !state.soundEnabled;
+                const btn = document.getElementById('toggle-sound-btn');
+                const text = document.getElementById('sound-status-text');
+                const onIcon = document.getElementById('sound-on-icon');
+                const offIcon = document.getElementById('sound-off-icon');
+                
+                if (state.soundEnabled) {
+                    text.textContent = 'Sons Ativos';
+                    btn.classList.remove('bg-gray-300', 'text-gray-700', 'hover:bg-gray-400');
+                    btn.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
+                    onIcon.classList.remove('hidden');
+                    offIcon.classList.add('hidden');
+                    playSound('click'); // Toca som para confirmar
+                } else {
+                    text.textContent = 'Sons Desativos';
+                    btn.classList.add('bg-gray-300', 'text-gray-700', 'hover:bg-gray-400');
+                    btn.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
+                    onIcon.classList.add('hidden');
+                    offIcon.classList.remove('hidden');
+                }
+            });
+
+            // NOVO: Botão Toggle Timer
+            document.getElementById('toggle-timer-btn').addEventListener('click', () => {
+                playSound('click');
+                state.timerEnabled = !state.timerEnabled;
+                const btn = document.getElementById('toggle-timer-btn');
+                const text = document.getElementById('timer-status-text');
+                const onIcon = document.getElementById('timer-on-icon');
+                const offIcon = document.getElementById('timer-off-icon');
+                
+                if (state.timerEnabled) {
+                    text.textContent = 'Timer Ativo';
+                    btn.classList.remove('bg-gray-300', 'text-gray-700', 'hover:bg-gray-400');
+                    btn.classList.add('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+                    onIcon.classList.remove('hidden');
+                    offIcon.classList.add('hidden');
+                } else {
+                    text.textContent = 'Timer Desativo';
+                    btn.classList.add('bg-gray-300', 'text-gray-700', 'hover:bg-gray-400');
+                    btn.classList.remove('bg-blue-500', 'text-white', 'hover:bg-blue-600');
+                    onIcon.classList.add('hidden');
+                    offIcon.classList.remove('hidden');
+                }
+            });
+            
+            // Botão Imprimir Fichas
+            document.getElementById('print-sheets-btn').addEventListener('click', () => {
+                playSound('click');
+                generatePrintableSheets();
+            });
+            
+            // NOVO: Botão Certificado
+            document.getElementById('certificate-btn').addEventListener('click', (e) => {
+                if (!e.currentTarget.disabled) {
+                    playSound('correct'); // Use 'correct' sound as a success sound
+                    renderCertificate();
+                    navigateTo('certificate');
+                }
+            });
+            
+             // Botão Imprimir Certificado (REMOVIDO)
+            
+            // NOVO: Listeners do Assistente IA
+            // Este listener estava incorreto (chamava navigateTo)
+            // O listener correto está no fim do DOMContentLoaded
+            
+            document.getElementById('close-ai-btn').addEventListener('click', () => {
+                playSound('click');
+                document.getElementById('section-ai-assistant').style.display = 'none';
+                // Não muda o state.currentSection, para que o utilizador volte onde estava
+            });
+            
+            // Fechar modal ao clicar no fundo
+            document.getElementById('section-ai-assistant').addEventListener('click', (e) => {
+                 if (e.target === e.currentTarget) { // Apenas se clicar no fundo
+                     playSound('click'); // Adicionado som ao fechar no fundo
+                     document.getElementById('section-ai-assistant').style.display = 'none';
+                 }
+            });
+
+            document.getElementById('ai-send-btn').addEventListener('click', handleAISend);
+            
+            document.getElementById('ai-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Evita que o formulário (inexistente) seja submetido
+                    handleAISend();
+                }
+            });
+
+            // Botão Iniciar Prática (da Teoria)
+            document.getElementById('start-practice-btn').addEventListener('click', () => {
+                startPractice();
+            });
+            
+            // Botão Voltar à Teoria (da Prática)
+            document.getElementById('back-to-theory-btn').addEventListener('click', () => {
+                selectModule(state.selectedModule); // Recarrega a teoria
+            });
+            
+            // Botão Tentar Novamente (dos Resultados)
+            document.getElementById('retry-module-btn').addEventListener('click', () => {
+                // Reinicia o módulo
+                state.currentActivity = 0;
+                state.moduleAnswers = [];
+                state.activityAnswers = {};
+                startPractice(); // Reinicia a prática (e o timer, se ativo)
+            });
+            
+            // REMOVIDO: O listener 'onafterprint' foi substituído por 'setTimeout'
+            // window.onafterprint = () => { ... }
+
+            // Adiciona um listener global para a primeira interação para iniciar os sons (REMOVIDO - Agora é feito em playSound)
+            /*
+            document.body.addEventListener('click', initSounds, { once: true });
+            document.body.addEventListener('keypress', initSounds, { once: true });
+            */
+            
+            // Correção da navegação para o modal AI
+            // Este é o listener CORRETO para ABRIR o modal
+            document.getElementById('ai-assistant-btn').addEventListener('click', () => {
+                playSound('click');
+                document.getElementById('section-ai-assistant').style.display = 'flex';
+                // Não muda o state.currentSection
+            });
+        });
+        
+    </script>
+</body>
+</html>
