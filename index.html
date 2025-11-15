@@ -2201,10 +2201,17 @@
                     
                     return { text, sources };
                 } else {
-                    // Tenta lidar com respostas bloqueadas
-                    if (candidate && candidate.finishReason === 'SAFETY' || candidate.finishReason === 'OTHER') {
+                    // Tenta lidar com respostas bloqueadas (quando há candidato, mas não conteúdo)
+                    if (candidate && (candidate.finishReason === 'SAFETY' || candidate.finishReason === 'OTHER')) {
                         return { text: "Não posso responder a esse pedido. Tenta reformular a tua pergunta focado na gramática.", sources: [] };
                     }
+                    
+                    // NOVO: Tenta lidar com bloqueio de prompt (quando NÃO HÁ candidato)
+                    if (!candidate && result.promptFeedback && result.promptFeedback.blockReason) {
+                         return { text: "O teu pedido foi bloqueado por motivos de segurança antes de ser processado. Por favor, reformula.", sources: [] };
+                    }
+                    
+                    // Se nenhuma das anteriores, é uma resposta inválida
                     throw new Error('Resposta da API inválida ou sem conteúdo.');
                 }
             } catch (error) {
