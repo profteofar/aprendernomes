@@ -6,8 +6,6 @@
     <title>Aprender Nomes - 5º/6º Ano</title>
     <!-- Carregar Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carregar Tone.js para sons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     
     <!-- Configuração do Tailwind -->
     <script>
@@ -85,8 +83,6 @@
             opacity: 0;
             animation: confetti 3s linear forwards;
         }
-        
-        /* Estilos do Chat IA (REMOVIDOS) */
         
         /* Estilos de Impressão */
         @media print {
@@ -186,18 +182,10 @@
             <!-- ADICIONADO "relative" A ESTE CONTAINER -->
             <div class="max-w-6xl mx-auto relative">
 
-                <!-- NOVO: Container para os botões de settings (Timer e Som) -->
+                <!-- NOVO: Container para os botões de settings (Timer) -->
                 <div class="absolute top-6 right-6 flex gap-4 no-print">
-                    <button
-                        id="toggle-sound-btn"
-                        class="px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center bg-green-500 text-white hover:bg-green-600"
-                    >
-                        <!-- Ícone de Volume SVG -->
-                        <svg id="sound-on-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-0 sm:mr-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                        <!-- Ícone de Volume Mudo SVG -->
-                        <svg id="sound-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-0 sm:mr-2 hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-                        <span id="sound-status-text" class="hidden sm:inline">Sons Ativos</span>
-                    </button>
+                    
+                    <!-- Botão Som REMOVIDO -->
                     
                     <!-- NOVO: Botão Timer -->
                     <button
@@ -242,7 +230,7 @@
                     </div>
                 </div>
 
-                <!-- BOTÕES DE AÇÃO PRINCIPAIS (AGORA SEM SOM E TIMER) -->
+                <!-- BOTÕES DE AÇÃO PRINCIPAIS (AGORA SEM SOM E IA) -->
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
                     <button
                         id="print-sheets-btn"
@@ -253,7 +241,7 @@
                         Imprimir Fichas
                     </button>
                     
-                    <!-- Botão Assistente IA (REMOVIDO) -->
+                    <!-- Botão Assistente IA REMOVIDO -->
                     
                     <button
                         id="certificate-btn"
@@ -456,14 +444,9 @@
             </div>
         </section>
 
-        <!-- Secção Assistente IA (REMOVIDA) -->
+        <!-- Secção Assistente IA REMOVIDA -->
 
-    </div> <!-- Fim do #app-container -->
-
-    <!-- NOVO: Rodapé -->
-    <footer class="text-center text-sm text-gray-500 py-8 px-6 bg-gray-100 no-print">
-        Teodósio Faria © 2025 aprendizagem dos Nomes para Português do 5º e 6º anos
-    </footer>
+    </div>
 
     <!-- Container para Confetti -->
     <div id="confetti-container"></div>
@@ -493,7 +476,7 @@
             selectedModule: null, // 'subclasses', 'genero', 'numero', 'grau'
             currentActivity: 0,
             studentName: '',
-            soundEnabled: true,
+            // soundEnabled: true, // REMOVIDO
             timerEnabled: false, // NOVO: Estado do Timer
             moduleStartTime: null, // NOVO: Início do timer
             moduleTimeTaken: 0, // NOVO: Tempo gasto (em segundos)
@@ -507,51 +490,15 @@
         };
 
         // --- SONS ---
-        let correctSound, wrongSound, clickSound;
+        // Bloco de sons (initSounds, correctSound, etc.) REMOVIDO
         
-        // Inicializar os sons após a primeira interação do utilizador
-        function initSounds() {
-            if (Tone.context.state !== 'running') {
-                Tone.start();
-            }
-            
-            correctSound = new Tone.Synth({
-                oscillator: { type: 'sine' },
-                envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
-            }).toDestination();
-            
-            wrongSound = new Tone.Synth({
-                oscillator: { type: 'square' },
-                envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.1 }
-            }).toDestination();
-            
-            clickSound = new Tone.Synth({
-                oscillator: { type: 'sine' },
-                envelope: { attack: 0.01, decay: 0.05, sustain: 0, release: 0.1 }
-            }).toDestination();
-            
-            console.log('Sons inicializados');
-        }
-
+        /**
+         * Os sons foram removidos a pedido. 
+         * Esta função vazia existe para que as chamadas a ela não causem erros.
+         * @param {string} sound 
+         */
         function playSound(sound) {
-            // NOVO: Garantir que os sons estão inicializados ANTES de tentar usá-los
-            if (state.soundEnabled && !correctSound) {
-                initSounds();
-            }
-
-            if (state.soundEnabled && sound) {
-                if (Tone.context.state !== 'running') {
-                    Tone.start();
-                }
-                
-                if (sound === 'correct') {
-                    correctSound.triggerAttackRelease("C5", "8n");
-                } else if (sound === 'wrong') {
-                    wrongSound.triggerAttackRelease("E3", "8n");
-                } else if (sound === 'click') {
-                    clickSound.triggerAttackRelease("C4", "16n");
-                }
-            }
+            // Não faz nada
         }
         
         // --- BASE DE DADOS (CONTEÚDOS) ---
@@ -611,12 +558,12 @@
             genero: {
                 title: 'Género do Nome',
                 sections: [
-                   {
+                    {
                         subtitle: 'Formação do Feminino - Regra Geral',
                         content: 'Muitos nomes formam o feminino trocando o "-o" final por "-a".',
                         examples: ['gato → gata', 'menino → menina', 'aluno → aluna', 'miúdo → miúda']
                     },
-                    {
+                     {
                         subtitle: 'Casos Especiais',
                         content: 'Existem muitas formas diferentes de formar o feminino:',
                         examples: [
@@ -672,7 +619,7 @@
                         content: 'Trocam o "-l" por "-is".',
                         examples: ['jornal → jornais', 'papel → papéis', 'funil → funis', 'azul → azuis']
                     },
-                    {
+                     {
                         subtitle: 'Terminados em -il se forem',
                         content: 'agudos, substituem o "-l" por "-s"/ graves, substituem o "-il" por "-eis".',
                         examples: ['civil → civis (agudo)', 'perfil → perfis (agudo)', 'réptil → répteis (grave)', 'fóssil → fósseis (grave)']
@@ -730,7 +677,7 @@
                     id: 'sc2',
                     type: 'complete',
                     question: 'Completa as frases com o nome coletivo correto, escolhendo da lista.',
-                    options: ['alcateia', 'multidão', 'pinhal', 'constelação', 'exército'],
+                    options: ['alcateia', 'multidão', 'pinhal', 'constelação', 'exército', 'cardume'], // Adicionado 'cardume'
                     sentences: [
                         { text: 'Uma ____________ é um conjunto de estrelas.', answer: 'constelação' },
                         { text: 'Um ____________ é um conjunto de peixes.', answer: 'cardume' },
@@ -754,11 +701,11 @@
                             options: ['ilhas', 'navios', 'livros', 'pessoas'],
                             correct: 'ilhas'
                         },
-                        {
+                         {
                             question: '"Rebanho" é o coletivo de:',
                             options: ['ovelhas', 'elefantes', 'peixes', 'pássaros'],
                             correct: 'ovelhas'
-                        }
+                        },
                          {
                             question: '"Manada" é o coletivo de:',
                             options: ['ovelhas', 'elefantes', 'peixes', 'pássaros'],
@@ -801,7 +748,7 @@
                     type: 'transform',
                     question: 'Escreve o feminino dos seguintes nomes:',
                     items: [
-                         { word: 'pai', answer: 'mãe' },
+                        { word: 'pai', answer: 'mãe' },
                         { word: 'cão', answer: 'cadela' },
                         { word: 'ator', answer: 'atriz' },
                         { word: 'poeta', answer: 'poetisa' },
@@ -817,7 +764,7 @@
                     questions: [
                         {
                             question: 'O feminino de "imperador" é:',
-                            options: ['imperadora', 'imperatriz'], // Removido duplicado
+                            options: ['imperadora', 'imperatriz'],
                             correct: 'imperatriz'
                         },
                         {
@@ -959,7 +906,7 @@
                     question: 'Escreve o aumentativo dos seguintes nomes:',
                     items: [
                         { word: 'cabeça', answer: 'cabeçorra' }, // ou cabeção
-                        { word: 'fogo', answer: 'fogaréu' }, // <-- ERRO CORRIGIDO AQUI
+                        { word: 'fogo', answer: 'fogaréu' },
                         { word: 'muro', answer: 'muralha' }, // ou murão
                         { word: 'nariz', answer: 'narigão' }
                     ]
@@ -1020,7 +967,7 @@
          * @param {string} sectionId - O ID da secção ('menu', 'theory', 'practice', 'results')
          */
         function navigateTo(sectionId) {
-            playSound('click');
+            playSound('click'); // Esta chamada agora não faz nada, o que está correto
             
             // NOVO: Para o timer se sairmos da secção de prática
             if (state.currentSection === 'practice' && sectionId !== 'results') {
@@ -1034,7 +981,7 @@
 
             // Mostra a secção desejada
             const targetSection = document.getElementById(`section-${sectionId}`);
-            if (targetSection) { 
+            if (targetSection) {
                 targetSection.classList.add('active');
             } else {
                 console.error(`Secção não encontrada: ${sectionId}`);
@@ -1642,7 +1589,7 @@
                 });
             }
 
-            // Toca som e guarda resultado
+            // Toca som (agora não faz nada) e guarda resultado
             playSound(allCorrect ? 'correct' : 'wrong');
             state.moduleAnswers.push(activityScore);
             
@@ -1690,7 +1637,6 @@
                 renderActivity();
             } else {
                 // Esta parte agora é chamada automaticamente pela checkCurrentActivity
-                // Mas mantemos para o caso de algum fluxo antigo (não deve acontecer)
                 
                 // NOVO: Para o timer (fallback, caso não tenha sido parado)
                 if (state.timerEnabled && state.moduleStartTime) {
@@ -2031,7 +1977,7 @@
             }, 1000); // 1 segundo de delay
         }
         
-        // --- FUNÇÕES DO ASSISTENTE IA (REMOVIDAS) ---
+        // --- FUNÇÕES DO ASSISTENTE IA REMOVIDAS ---
 
         // --- INICIALIZAÇÃO E EVENT LISTENERS GLOBAIS ---
         
@@ -2069,33 +2015,11 @@
                 updateWelcomeMessage();
             });
 
-            // Botão Toggle Sound
-            document.getElementById('toggle-sound-btn').addEventListener('click', () => {
-                state.soundEnabled = !state.soundEnabled;
-                const btn = document.getElementById('toggle-sound-btn');
-                const text = document.getElementById('sound-status-text');
-                const onIcon = document.getElementById('sound-on-icon');
-                const offIcon = document.getElementById('sound-off-icon');
-                
-                if (state.soundEnabled) {
-                    text.textContent = 'Sons Ativos';
-                    btn.classList.remove('bg-gray-300', 'text-gray-700', 'hover:bg-gray-400');
-                    btn.classList.add('bg-green-500', 'text-white', 'hover:bg-green-600');
-                    onIcon.classList.remove('hidden');
-                    offIcon.classList.add('hidden');
-                    playSound('click'); // Toca som para confirmar
-                } else {
-                    text.textContent = 'Sons Desativos';
-                    btn.classList.add('bg-gray-300', 'text-gray-700', 'hover:bg-gray-400');
-                    btn.classList.remove('bg-green-500', 'text-white', 'hover:bg-green-600');
-                    onIcon.classList.add('hidden');
-                    offIcon.classList.remove('hidden');
-                }
-            });
+            // Botão Toggle Sound REMOVIDO
 
             // NOVO: Botão Toggle Timer
             document.getElementById('toggle-timer-btn').addEventListener('click', () => {
-                playSound('click');
+                playSound('click'); // Não faz nada, mas não dá erro
                 state.timerEnabled = !state.timerEnabled;
                 const btn = document.getElementById('toggle-timer-btn');
                 const text = document.getElementById('timer-status-text');
@@ -2126,14 +2050,14 @@
             // NOVO: Botão Certificado
             document.getElementById('certificate-btn').addEventListener('click', (e) => {
                 if (!e.currentTarget.disabled) {
-                    playSound('correct'); // Use 'correct' sound as a success sound
+                    playSound('correct'); // Não faz nada, mas não dá erro
                     renderCertificate();
                     navigateTo('certificate');
                 }
             });
             
-            // Listeners do Assistente IA (REMOVIDOS)
-            
+            // Listeners do Assistente IA REMOVIDOS
+
             // Botão Iniciar Prática (da Teoria)
             document.getElementById('start-practice-btn').addEventListener('click', () => {
                 startPractice();
@@ -2152,7 +2076,7 @@
                 state.activityAnswers = {};
                 startPractice(); // Reinicia a prática (e o timer, se ativo)
             });
-
+            
         });
         
     </script>
