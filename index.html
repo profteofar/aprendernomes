@@ -647,9 +647,14 @@
                         examples: ['casa → casas', 'livro → livros', 'escola → escolas']
                     },
                     {
-                        subtitle: 'Terminados em -r, -s, -z',
+                        subtitle: 'Terminados em -r, -z',
                         content: 'Acrescenta-se "-es".',
-                        examples: ['mar → mares', 'país → países', 'rapaz → rapazes']
+                        examples: ['mar → mares', 'rapaz → rapazes']
+                    },
+                    {
+                        subtitle: 'Terminados em -s se forem',
+                        content: 'agudos, acrescenta-se "-es"/ graves, são invariáveis.',
+                        examples: ['o país → os países (agudo)', 'o lápis → os lápis (grave)']
                     },
                     {
                         subtitle: 'Terminados em -ão',
@@ -660,6 +665,11 @@
                         subtitle: 'Terminados em -l',
                         content: 'Trocam o "-l" por "-is".',
                         examples: ['jornal → jornais', 'papel → papéis', 'funil → funis', 'azul → azuis']
+                    },
+                    {
+                        subtitle: 'Terminados em -il se forem',
+                        content: 'agudos, substituem o "-l" por "-s"/ graves, substituem o "-il" por "-eis".',
+                        examples: ['civil → civis (agudo)', 'perfil → perfis (agudo)', 'réptil → répteis (grave)', 'fóssil → fósseis (grave)']
                     },
                      {
                         subtitle: 'Terminados em -m',
@@ -866,6 +876,11 @@
                             options: ['os funils', 'os funiles', 'os funis'],
                             correct: 'os funis'
                         },
+                        {
+                            question: 'O plural de "o fóssil" é:',
+                            options: ['os fóssils', 'os fósseis', 'os fóssis'],
+                            correct: 'os fósseis'
+                        },
                          {
                             question: 'Qual é o plural de "o lápis"?',
                             options: ['os lápis', 'os lápises', 'os lápize'],
@@ -881,6 +896,7 @@
                         { text: 'Comprei vários __________ (cachecol) para o inverno.', answer: 'cachecóis' },
                         { text: 'Os __________ (país) da Europa são diversos.', answer: 'países' },
                         { text: 'Os __________ (irmão) dele são gémeos.', answer: 'irmãos' },
+                        { text: 'Os __________ (perfil) estão bem feitos.', answer: 'perfis' },
                         { text: 'Caíram vários __________ (papel) ao chão.', answer: 'papéis' }
                     ]
                 },
@@ -892,6 +908,7 @@
                         { word: 'o atlas', answer: 'os atlas' },
                         { word: 'o mel', answer: 'os méis' }, // ou "os meles", mas "méis" é mais comum
                         { word: 'o réptil', answer: 'os répteis' },
+                        { word: 'o civil', answer: 'os civis' },
                         { word: 'o bombom', answer: 'os bombons' },
                         { word: 'o álcool', answer: 'os álcoois' }
                     ]
